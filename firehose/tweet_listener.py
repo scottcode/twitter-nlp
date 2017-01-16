@@ -33,14 +33,13 @@ class CustomStreamListener(tweepy.StreamListener):
 
     """Source: http://www.brettdangerfield.com/post/realtime_data_tag_cloud/ """
     def __init__(self, api):
-        self.api = api
         self.tweet_list = []
         self.score_tweet_time = time.time()
         self.write_to_redis_time = time.time()
         self.p = 0.5
         self.score_post_int = 0.5
         self.write_to_redis_int = 5
-        super(tweepy.StreamListener, self).__init__()
+        tweepy.StreamListener.__init__(self, api)
 
     def compute_polarities(self, tweet_list):
         url = 'http://sentiment-compute-app.cfapps.pez.pivotal.io/polarity_compute'
