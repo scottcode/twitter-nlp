@@ -20,10 +20,15 @@ import requests
 import sklearn
 
 import helper_functions
+from feature_extractor import (
+    FeatureExtractor, is_field_nonnull, subfield_getter, subfield_func_apply
+)
 
-resp = requests.get("https://raw.githubusercontent.com/crawles/gpdb_sentiment_analysis_twitter_model/master/twitter_sentiment_model.pkl")
-resp.raise_for_status()
-cl = cPickle.loads(resp.content)
+# resp = requests.get("https://raw.githubusercontent.com/crawles/gpdb_sentiment_analysis_twitter_model/master/twitter_sentiment_model.pkl")
+# resp.raise_for_status()
+# cl = cPickle.loads(resp.content)
+with open('twitter-consumer-desire-pipe.pkl') as f:
+    cl = cPickle.load(f)
 
 # connect to redis for storing logging info
 r = helper_functions.connect_redis_db()
@@ -50,7 +55,8 @@ app = Flask(__name__)
 def sentiment_compute():
     req = request.get_json(force=True)
     print request.get_json()
-    X = regex_preprocess(req['data'])
+    # X = regex_preprocess(req['data'])
+    X = req['data']
     prediction = cl.predict_proba(X)[:][:,1]
 
     # for logging

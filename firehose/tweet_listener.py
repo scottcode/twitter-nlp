@@ -23,8 +23,7 @@ ACCESS_TOKEN_SECRET=os.getenv('ACCESS_TOKEN_SECRET',None)
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 api = tweepy.API(auth)
-terms = ['python','steph curry','cloud foundry','pivotal','new york','data science', 'javascript',
-         'machine learning', 'wonderful', 'algorithm', 'java', 'programming']
+terms = ['tesla']
 
 # load synthetic tweets for backup
 syn_tweets = cPickle.load(open('status-11-17-2016.pkl'))
@@ -43,7 +42,9 @@ class CustomStreamListener(tweepy.StreamListener):
         super(tweepy.StreamListener, self).__init__()
 
     def compute_polarities(self, tweet_list):
-        url = 'http://sentiment-compute-app.cfapps.pez.pivotal.io/polarity_compute'
+        # url = 'http://sentiment-compute-app.cfapps.pez.pivotal.io/polarity_compute'
+        # url = 'http://0.0.0.0/polarity_compute'
+        url = 'http://sentiment-compute-app.local.pcfdev.io/polarity_compute'
         # url = 'http://127.0.0.1:8001/polarity_compute'
         ps = requests.post(url, json={"data": self.tweet_list}).json()['polarity']
         return ps
@@ -73,7 +74,7 @@ class CustomStreamListener(tweepy.StreamListener):
         if not self.english_tweet(status):
             return
         # print status.text
-        self.tweet_list.append(status.text)
+        self.tweet_list.append(status._json)
         time_since_last_score = (time.time() - self.score_tweet_time)
         if time_since_last_score > self.score_post_int:
             # score sentiment
