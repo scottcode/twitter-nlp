@@ -15,13 +15,18 @@ else:
 
 def is_field_nonnull(obj, field):
     """Check whether obj[field] is null (None or numpy.nan)"""
-    return not pandas.isnull(obj[field])
+    if field not in obj:
+        return False
+    else:
+        return not pandas.isnull(obj[field])
 
 
 def subfield_getter(obj, field_seq):
     """Recursively get items from obj based on field_seq"""
     if len(field_seq) == 0:
         return obj
+    elif field_seq[0] not in obj:
+        return None
     else:
         return subfield_getter(obj[field_seq[0]], field_seq[1:])
 
@@ -49,3 +54,9 @@ class FeatureExtractor(sklearn.base.TransformerMixin):
         else:
             iter_ = X
         return tuple(tuple(func(i) for key, func in self.funcs.items()) for i in iter_)
+
+    def __getstate__(self):
+        return self.funcs
+
+    def __setstate__(self, state):
+        self.funcs = state
