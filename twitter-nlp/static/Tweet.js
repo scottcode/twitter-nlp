@@ -16,12 +16,15 @@ $(document).ready(
     }
 );
 function polarityToLabel(p) {
-    if (p >= 0.9) {
-        return "<div style=\"color:green\"> pos </div> "
-    } else if (p <= 0.1) {
-        return "<div style=\"color:red\"> neg </div> "
+    var color = new String;
+    if (p >= 0.7) {
+        color = 'black';
+    } else if (p > 0.3) {
+        color = 'DarkGrey';
+    } else {
+        color = 'LightGrey';
     }
-    return "neu"
+    return "<div style=\"color:"+color+"\"> "+p+" </div> "
 }
 
 function urlify(text) {
