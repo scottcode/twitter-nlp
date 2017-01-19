@@ -5,15 +5,16 @@ import os
 import random
 import sys
 import time
+import traceback
 
 from profanity import profanity
 import requests
 import tweepy
 
-import helper_functions
+from helper_functions import connect_redis_db, get_raw_tweets_sample
 
 # connect to redis
-r = helper_functions.connect_redis_db()
+r = connect_redis_db()
 
 # connect to twitter api
 CONSUMER_KEY=os.getenv('CONSUMER_KEY',None)
@@ -26,7 +27,7 @@ api = tweepy.API(auth)
 terms = ['tesla']
 
 # load synthetic tweets for backup
-syn_tweets = cPickle.load(open('status-11-17-2016.pkl'))
+syn_tweets = get_raw_tweets_sample('teslatweet_2017-1-16.gz')
 
 class CustomStreamListener(tweepy.StreamListener):
 
@@ -50,7 +51,7 @@ class CustomStreamListener(tweepy.StreamListener):
         return ps
 
     def save_posted_tweet_to_redis(self, tweet, p, source):
-        msg = json.dumps({'text': profanity.censor(tweet),  # for public dashboard
+        msg = json.dumps({'text': profanity.censor(tweet['text']),  # for public dashboard
                           'polarity': p,
                           'source': source})
         r.publish('tweet_msgs', msg)
@@ -109,6 +110,7 @@ while True:
         stream.filter(track = terms, stall_warnings=True, filter_level="low")
     except (KeyboardInterrupt, Exception), e:
         print e
+        sys.stderr.write(traceback.format_exc() + '\n')
         print 'Emulating tweets for {} seconds'.format(emulate_time)
         stream.disconnect()
         start_time = time.time()

@@ -53,3 +53,20 @@ def been_n_second(n,time_now,time_start,wait_time = 0.01):
     # TODO remove time.sleep
     time.sleep(wait_time)
     return False
+
+
+def get_raw_tweets_sample(path='teslatweet_2017-1-16.gz'):
+    """
+    >>> get_raw_tweets_sample()[0].id > 0
+    True
+    """
+    import gzip
+    import tweepy
+
+    status_obj = tweepy.Status()
+    with gzip.GzipFile(path) as f:
+        statuses = tuple(
+            status_obj.parse(None, json.loads(line))
+            for line in f.readlines()
+        )
+    return statuses
