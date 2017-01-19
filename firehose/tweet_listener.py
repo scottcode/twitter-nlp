@@ -108,7 +108,10 @@ while True:
     try:
         print 'Connecting to Twitter Firehose'
         stream.filter(track = terms, stall_warnings=True, filter_level="low")
-    except (KeyboardInterrupt, Exception), e:
+    except KeyboardInterrupt:
+        sys.stdout.write('{}\n'.format('Stopping due to KeyboardInterrupt'))
+        break
+    except Exception as e:
         print e
         sys.stderr.write(traceback.format_exc() + '\n')
         print 'Emulating tweets for {} seconds'.format(emulate_time)
