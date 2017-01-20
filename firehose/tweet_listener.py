@@ -16,6 +16,9 @@ from helper_functions import connect_redis_db, get_raw_tweets_sample
 # connect to redis
 r = connect_redis_db()
 
+# twitter compute URL, from manifest
+SENTIMENT_COMPUTE_URL=os.getenv('SENTIMENT_COMPUTE_URL',None)
+
 # connect to twitter api
 CONSUMER_KEY=os.getenv('CONSUMER_KEY',None)
 CONSUMER_SECRET=os.getenv('CONSUMER_SECRET',None)
@@ -43,9 +46,7 @@ class CustomStreamListener(tweepy.StreamListener):
         super(tweepy.StreamListener, self).__init__()
 
     def compute_polarities(self, tweet_list):
-        # url = 'http://sentiment-compute-app.cfapps.pez.pivotal.io/polarity_compute'
-        # url = 'http://0.0.0.0/polarity_compute'
-        url = 'http://sentiment-compute-app.local.pcfdev.io/polarity_compute'
+        url = '{}/polarity_compute'.format(SENTIMENT_COMPUTE_URL)
         # url = 'http://127.0.0.1:8001/polarity_compute'
         ps = requests.post(url, json={"data": self.tweet_list}).json()['polarity']
         return ps
