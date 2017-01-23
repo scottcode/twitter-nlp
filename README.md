@@ -20,7 +20,7 @@ Dashboard information:
 * firehose: connects to Twitter firehose and publishes Tweets to redis for the dashboard
 * gen-tweet-stats: gets the performance statistics generated from "compute-tweet-stats"
 * load-test-twitter-nlp: a load testing application for scale testing
-* sentiment-compute-app: [sentiment analysis model](https://github.com/crawles/gpdb_sentiment_analysis_twitter_model) accessible via a RESTful API
+* sentiment-compute-app: [consumer desire model](https://github.com/scottcode/consumer-desire-twitter-model) accessible via a RESTful API
 * twitter-nlp: the dashboard
 
 ## Deploying the app on Pivotal Cloud Foundry
