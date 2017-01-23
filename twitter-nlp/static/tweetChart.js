@@ -15,7 +15,7 @@ sse1.onmessage = function(message) {
 
 function draw(divId,dataMetric,margin,width,height) {
     var nterpType = d3.curveBasis;
-    var yLabel = "average sentiment";
+    var yLabel = "average relevance";
     var lineName = "sentiment-line";
     var yLabelPos = -11;
     var idName = "id1";
