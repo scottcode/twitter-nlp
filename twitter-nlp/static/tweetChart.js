@@ -42,7 +42,7 @@ function draw(divId,dataMetric,margin,width,height) {
         .attr("text-anchor", "end")
         .attr("x", (width) / 2)
         .attr("y", height + 30)
-        .text("Time (seconds)");
+        .text("time");
 
     g.append("text")
         .attr("class", "y label")
@@ -53,7 +53,7 @@ function draw(divId,dataMetric,margin,width,height) {
         .text(yLabel);
 
     var x = d3.scaleLinear()
-        .domain([-(n - 2), -1])
+        .domain([1, n - 2])
         .range([0, width]);
     var y = d3.scaleLinear()
         .domain([0, Math.max(1, d3.max(data))])
