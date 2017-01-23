@@ -11,7 +11,7 @@ from profanity import profanity
 import requests
 import tweepy
 
-from helper_functions import connect_redis_db, get_raw_tweets_sample
+from helper_functions import connect_redis_db, get_raw_tweets_sample_from_url
 
 # connect to redis
 r = connect_redis_db()
@@ -34,7 +34,8 @@ api = tweepy.API(auth)
 terms = ['tesla', 'microsoft', 'apple', 'lenovo', 'samsung']
 
 # load synthetic tweets for backup
-syn_tweets = get_raw_tweets_sample('teslatweet_2017-1-16.gz')
+sample_tweets_url = 'https://github.com/scottcode/consumer-desire-twitter-model/raw/master/teslatweet_2017-1-5.gz'
+syn_tweets = get_raw_tweets_sample_from_url(sample_tweets_url)
 
 class CustomStreamListener(tweepy.StreamListener):
 

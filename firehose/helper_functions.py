@@ -2,8 +2,13 @@ import json
 import os
 import time
 import threading
+import gzip
+import requests
+import StringIO
 
 import redis
+import tweepy
+
 
 # initialize redis connection for local and CF deployment
 def connect_redis_db(redis_service_name = 'p-redis'):
@@ -55,18 +60,33 @@ def been_n_second(n,time_now,time_start,wait_time = 0.01):
     return False
 
 
+def raw_tweet_lines_to_status_objs(iterable):
+    status_obj = tweepy.Status()
+    return tuple(
+        status_obj.parse(None, json.loads(line))
+        for line in iterable
+    )
+
+
 def get_raw_tweets_sample(path='teslatweet_2017-1-16.gz'):
     """
     >>> get_raw_tweets_sample()[0].id > 0
     True
     """
-    import gzip
-    import tweepy
-
     status_obj = tweepy.Status()
     with gzip.GzipFile(path) as f:
-        statuses = tuple(
-            status_obj.parse(None, json.loads(line))
-            for line in f.readlines()
-        )
+        statuses = raw_tweet_lines_to_status_objs(f.readlines())
+    return statuses
+
+
+def get_raw_tweets_sample_from_url(url):
+    """
+    >>> get_raw_tweets_sample_from_url('https://github.com/scottcode/consumer-desire-twitter-model/raw/master/teslatweet_2017-1-5.gz')[0].id > 0
+    True
+    """
+    resp = requests.get(url)
+    resp.raise_for_status()
+    buff = StringIO.StringIO(resp.content)
+    with gzip.GzipFile(fileobj=buff) as f:
+        statuses = raw_tweet_lines_to_status_objs(f.readlines())
     return statuses
