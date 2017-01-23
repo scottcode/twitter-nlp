@@ -76,7 +76,13 @@ function draw(divId,dataMetric,margin,width,height) {
     g.append("g")
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + y(0) + ")")
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x)
+            .tickFormat(
+                // For ticks, convert to number of seconds ago
+                function (num) {
+                    return (n - num);
+                }
+            ));
     g.append("g")
         .attr("class", "yaxis")
         .call(d3.axisLeft(y));
