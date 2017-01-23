@@ -24,10 +24,14 @@ CONSUMER_KEY=os.getenv('CONSUMER_KEY',None)
 CONSUMER_SECRET=os.getenv('CONSUMER_SECRET',None)
 ACCESS_TOKEN=os.getenv('ACCESS_TOKEN',None)
 ACCESS_TOKEN_SECRET=os.getenv('ACCESS_TOKEN_SECRET',None)
+if not all((CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)):
+    sys.stderr.write('{}\n'.format(
+        "Missing Twitter credentials in environment variables."
+    ))
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 api = tweepy.API(auth)
-terms = ['tesla']
+terms = ['tesla', 'microsoft', 'apple', 'lenovo', 'samsung']
 
 # load synthetic tweets for backup
 syn_tweets = get_raw_tweets_sample('teslatweet_2017-1-16.gz')
@@ -84,8 +88,9 @@ class CustomStreamListener(tweepy.StreamListener):
             # for sentiment plot on dashboard - using average polarity per second (js code queries every second)
             mean_ps = sum(ps)/(1.0*len(ps))
             r.lpush('polarity', json.dumps({'time': time.time(), 'polarity': mean_ps}))
-            cur_tweet = self.tweet_list[-1]
-            cur_p = ps[-1]
+            best_index = ps.index(max(ps))
+            cur_tweet = self.tweet_list[best_index]
+            cur_p = ps[best_index]
             self.score_tweet_time = time.time()
             self.tweet_list = []
         # for posting to dashboard every n seconds
