@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Twitter NLP</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+  <link rel="stylesheet" type="text/css" href="../static/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../static/keen-dashboards.css" />
+  <link rel="stylesheet" type="text/css" href="../static/main.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript" src="../static/Tweet.js"></script>
+  <script type="text/javascript" src="../static/rateTweet.js"></script>
+
+  <script type="text/javascript" src="../static/sendSyntheticTweets.js"></script>
+  <link href="https://d1fto35gcfffzn.cloudfront.net/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+</head>
+<body class="application">
+
+</body>
+
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <a class="navbar-brand" href="">Twitter NLP</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-left">
+          <li><a href="https://github.com/scottcode/twitter-nlp/tree/tesla">Source (GitHub)</a></li>
+          <li><a href="https://pivotal.io/">Pivotal.io</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+
+
+      <div class="col-lg-12">
+        <div class="chart-wrapper">
+                  <div class="chart-title container-fluid">
+                      <div class="col-sm-6" style="font-size:20px">Rate this Tweet</div>
+                  </div>
+          <div class="chart-stage" style="height:825px">
+                  <div class="col-lg-3">
+                    <div id="displayedTweet"></div>
+                  </div>
+                  <div class="col-lg-3">
+                    <button type="button" class="btn btn-danger" onclick="applyLabel('not_relevant', tweetJSON)">Not relevant</button>
+                    <button type="button" class="btn btn-primary" onclick="applyLabel('relevant', tweetJSON)">Relevant</button>
+                    <button type="button" class="btn btn-secondary" onclick="getNextTweet()">Skip</button>
+
+                  </div>
+
+          </div>
+        </div>
+        <p class="small text-muted"><a href="https://pivotal.io/data-science">Pivotal Data Science</a> 2017</p>
+
+      </div>
+
+    <hr>
+
+  </div>
+
+  <script type="text/javascript" src="../static/holder.js"></script>
+  <script>
+    Holder.add_theme("white", { background:"#fff", foreground:"#a7a7a7", size:10 });
+  </script>
+  <script type="text/javascript" src="../static/keen.min.js"></script>
+  <script type="text/javascript" src="../static/meta.js"></script>
+  <script src="http://d3js.org/d3.v4.min.js"></script>
+    <script>
+      //var curTweet =  '{% autoescape false %}{{ curTweet }}{% endautoescape %}';
+      //var curTweet =  '{{ curTweet | safe}}'
+
+    </script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-76191007-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+
+</html>

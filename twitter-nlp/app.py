@@ -11,7 +11,7 @@ import os
 import time
 
 import redis
-from flask import Flask, request, Response, render_template
+from flask import Flask, request, Response, render_template, jsonify
 from gevent import monkey, sleep, socket
 from gevent.pywsgi import WSGIServer
 
@@ -72,6 +72,27 @@ def page():
     return render_template('index.html',
                            SENTIMENT_COMPUTE_URL = SENTIMENT_COMPUTE_URL,
                            SENTIMENT_STATS_URL = SENTIMENT_STATS_URL)
+
+@app.route('/rate')
+def rate_tweets():
+    cur_tweet = r.lrange('training_backlog',0,0)[0]
+    cur_tweet_escaped = cur_tweet.replace('\\', '\\\\')
+    return render_template('rate.html',
+                           curTweet = cur_tweet_escaped)
+
+@app.route('/collect_tweet', methods=['POST'])
+def collect_tweet():
+    # print request.data
+    # print type(request.data)
+    r.lpush('labeled_tweets', request.data)
+    return '{"success": true}'
+
+@app.route('/next_tweet_to_label', methods=['GET'])
+def next_tweet_to_label():
+    r.lpop('training_backlog')
+    cur_tweet = r.lrange('training_backlog',0,0)[0]
+    cur_tweet_escaped = json.loads(cur_tweet)
+    return jsonify({"tweet": cur_tweet_escaped})
 
 if __name__ == '__main__':
     if os.environ.get('VCAP_SERVICES') is None: # running locally

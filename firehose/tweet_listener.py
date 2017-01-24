@@ -83,6 +83,10 @@ class CustomStreamListener(tweepy.StreamListener):
         # print status.text
         self.tweet_list.append(status._json)
         time_since_last_score = (time.time() - self.score_tweet_time)
+
+        if r.llen('training_backlog') < 100:
+            r.lpush('training_backlog', json.dumps(full_tweet._json))
+
         if time_since_last_score > self.score_post_int:
             # score sentiment
             ps = self.compute_polarities(self.tweet_list)
