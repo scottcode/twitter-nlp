@@ -94,6 +94,31 @@ def next_tweet_to_label():
     cur_tweet_escaped = json.loads(cur_tweet)
     return jsonify({"tweet": cur_tweet_escaped})
 
+
+@app.route('/redis_info', methods=['GET'])
+def redis_info():
+    return jsonify({
+        "info_time": time.strftime('%c', time.gmtime()),
+        "redis_info": r.info()
+    })
+
+
+@app.route('/redis_list_len', methods=['GET'])
+def redis_list_len():
+    listname = request.args.get('list')
+    if listname is not None:
+        return jsonify({
+            "listname": listname,
+            "length": r.llen(listname)
+        })
+    else:
+        return jsonify({
+            "listname": "",
+            "length": 0
+        })
+
+
+
 if __name__ == '__main__':
     if os.environ.get('VCAP_SERVICES') is None: # running locally
         PORT = 5001

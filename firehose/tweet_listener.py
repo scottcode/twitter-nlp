@@ -92,6 +92,10 @@ class CustomStreamListener(tweepy.StreamListener):
             ps = self.compute_polarities(self.tweet_list)
             # for sentiment plot on dashboard - using average polarity per second (js code queries every second)
             mean_ps = sum(ps)/(1.0*len(ps))
+
+            # housekeeping; only keep recent additions
+            r.ltrim('polarity', 0, 500)
+
             r.lpush('polarity', json.dumps({'time': time.time(), 'polarity': mean_ps}))
             best_index = ps.index(max(ps))
             cur_tweet = self.tweet_list[best_index]
