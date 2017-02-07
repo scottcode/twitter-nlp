@@ -30,7 +30,7 @@ applications:
       health-check-type: none
       command: python tweet_listener.py
       env:
-        SENTIMENT_COMPUTE_URL: 'http://sentiment-compute-app-jsh.cfapps.pez.pivotal.io'
+        SENTIMENT_COMPUTE_URL: 'http://sentiment-compute-app-jsh.apps.pcfongcp.com'
       services:
         - twitter-nlp-redis
 
@@ -44,19 +44,19 @@ applications:
       health-check-type: none
       command: python gen_stats.py
       env:
-        SENTIMENT_STATS_URL: 'http://compute-tweet-stats-jsh.cfapps.pez.pivotal.io'
+        SENTIMENT_STATS_URL: 'http://compute-tweet-stats-jsh.apps.pcfongcp.com'
       services:
         - twitter-nlp-redis
 
-    - name: load-test-twitter-nlp
-      path: ./load-test-twitter-nlp
-      memory: 1GB
-      disk_quota: 2GB
-      instances: 1
-      buildpack: python_buildpack
-      env:
-        SENTIMENT_COMPUTE_URL: 'http://sentiment-compute-app-jsh.cfapps.pez.pivotal.io'
-      command: locust --host=$SENTIMENT_COMPUTE_URL --web-host=0.0.0.0 --web-port=$PORT
+#    - name: load-test-twitter-nlp
+#      path: ./load-test-twitter-nlp
+#      memory: 1GB
+#      disk_quota: 2GB
+#      instances: 1
+#      buildpack: python_buildpack
+#      env:
+#        SENTIMENT_COMPUTE_URL: 'http://sentiment-compute-app-jsh.apps.pcfongcp.com'
+#      command: locust --host=$SENTIMENT_COMPUTE_URL --web-host=0.0.0.0 --web-port=$PORT
 
     - name: twitternlp-jsh
       path: ./twitter-nlp
@@ -67,7 +67,7 @@ applications:
       route: twitternlp-jsh
       command: python app.py
       env:
-        SENTIMENT_COMPUTE_URL: 'http://sentiment-compute-app-jsh.cfapps.pez.pivotal.io'
-        SENTIMENT_STATS_URL: 'http://compute-tweet-stats-jsh.cfapps.pez.pivotal.io'
+        SENTIMENT_COMPUTE_URL: 'http://sentiment-compute-app-jsh.apps.pcfongcp.com'
+        SENTIMENT_STATS_URL: 'http://compute-tweet-stats-jsh.apps.pcfongcp.com'
       services:
         - twitter-nlp-redis

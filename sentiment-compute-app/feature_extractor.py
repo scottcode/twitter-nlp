@@ -1,4 +1,6 @@
 import sys
+from functools import partial
+from collections import OrderedDict
 
 import pandas
 import sklearn.base
@@ -36,6 +38,21 @@ def subfield_func_apply(obj, field_seq, func=len):
     value found by recursively retrieving nested items from obj based
     on field_seq."""
     return func(subfield_getter(obj, field_seq))
+
+
+feat_only_per_rec_funcs = OrderedDict(
+    (
+        ('text_len', partial(subfield_func_apply, field_seq=('text',), func=len)),
+        ('user_protected', partial(subfield_getter, field_seq=('user', 'protected'))),
+        ('user_verified', partial(subfield_getter, field_seq=('user', 'verified'))),
+        ('is_quote', partial(is_field_nonnull, field='quoted_status')),
+        ('is_retweet', partial(is_field_nonnull, field='retweeted_status')),
+        ('user_mentions_n', partial(subfield_func_apply, field_seq=('entities', 'user_mentions'), func=len)),
+        ('urls_n', partial(subfield_func_apply, field_seq=('entities', 'urls'), func=len)),
+        ('hashtags_n', partial(subfield_func_apply, field_seq=('entities', 'hashtags'), func=len)),
+        ('symbols_n', partial(subfield_func_apply, field_seq=('entities', 'symbols'), func=len)),
+    )
+)
 
 
 # CLASSES

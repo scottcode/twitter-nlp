@@ -46,3 +46,12 @@ cf push
 ## Notes
 
 The project was inspired in part by [BirdWatch](https://github.com/matthiasn/BirdWatch)
+
+
+### Redis
+
+The following redis keys are used to store lists:
+
+* n_tweets
+* polarity
+* training_backlog
