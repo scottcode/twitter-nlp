@@ -107,6 +107,7 @@ class CustomStreamListener(tweepy.StreamListener):
         if time_since_last_redis_write > self.write_to_redis_int:
             self.save_posted_tweet_to_redis(cur_tweet,cur_p,source)
             self.write_to_redis_time = time.time()
+            r.publish('raw_tweet_stream', json.dumps(cur_tweet))
 
 
     def on_error(self, status_code):
